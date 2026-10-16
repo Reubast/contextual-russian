@@ -14,14 +14,14 @@ concurrency:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       HOST: ssh.aic7997609.nichost.ru
       SSH_USER: aic7997609
       REMOTE_DIR: aictx.ru/docs
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup SSH
         env:
