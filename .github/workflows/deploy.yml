@@ -36,15 +36,15 @@ jobs:
       - name: Upload files
         run: |
           SSH_OPTS="-i $HOME/.ssh/id_deploy -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o HostKeyAlgorithms=+ssh-rsa -o PubkeyAcceptedAlgorithms=+ssh-rsa -o UpdateHostKeys=no"
-          ssh $SSH_OPTS "$SSH_USER@$HOST" "mkdir -p ~/$REMOTE_DIR/en"
-          for f in README.md index.html robots.txt sitemap.xml yandex_a11cd095edcedbaf.html googleae9ca30a621e7f44.html en/index.html; do
+          ssh $SSH_OPTS "$SSH_USER@$HOST" "mkdir -p ~/$REMOTE_DIR/en ~/$REMOTE_DIR/zh ~/$REMOTE_DIR/hi"
+          for f in README.md index.html robots.txt sitemap.xml yandex_a11cd095edcedbaf.html googleae9ca30a621e7f44.html en/index.html zh/index.html hi/index.html; do
             scp $SSH_OPTS "$f" "$SSH_USER@$HOST:$REMOTE_DIR/$f"
           done
 
       - name: Verify
         run: |
           SSH_OPTS="-i $HOME/.ssh/id_deploy -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o HostKeyAlgorithms=+ssh-rsa -o PubkeyAcceptedAlgorithms=+ssh-rsa -o UpdateHostKeys=no"
-          for f in README.md index.html robots.txt sitemap.xml yandex_a11cd095edcedbaf.html googleae9ca30a621e7f44.html en/index.html; do
+          for f in README.md index.html robots.txt sitemap.xml yandex_a11cd095edcedbaf.html googleae9ca30a621e7f44.html en/index.html zh/index.html hi/index.html; do
             REMOTE_SUM=$(ssh $SSH_OPTS "$SSH_USER@$HOST" "sha256sum ~/$REMOTE_DIR/$f" | cut -d' ' -f1)
             LOCAL_SUM=$(sha256sum "$f" | cut -d' ' -f1)
             test "$REMOTE_SUM" = "$LOCAL_SUM" && echo "OK: $f matches" || { echo "Checksum mismatch: $f"; exit 1; }

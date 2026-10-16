@@ -7,6 +7,8 @@
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="ru" href="https://aictx.ru/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://aictx.ru/en/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://aictx.ru/zh/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://aictx.ru/hi/"/>
   </url>
   <url>
     <loc>https://aictx.ru/en/</loc>
@@ -15,5 +17,27 @@
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ru" href="https://aictx.ru/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://aictx.ru/en/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://aictx.ru/zh/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://aictx.ru/hi/"/>
+  </url>
+  <url>
+    <loc>https://aictx.ru/zh/</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://aictx.ru/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://aictx.ru/en/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://aictx.ru/zh/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://aictx.ru/hi/"/>
+  </url>
+  <url>
+    <loc>https://aictx.ru/hi/</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://aictx.ru/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://aictx.ru/en/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://aictx.ru/zh/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://aictx.ru/hi/"/>
   </url>
 </urlset>
