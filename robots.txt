@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: http://aic7997609.nichost.ru/sitemap.xml
+Sitemap: https://aictx.ru/sitemap.xml
