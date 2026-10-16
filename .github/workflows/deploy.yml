@@ -1,0 +1,46 @@
+name: Deploy to hosting
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-hosting
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      HOST: ssh.aic7997609.nichost.ru
+      SSH_USER: aic7997609
+      REMOTE_DIR: aictx.ru/docs
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        env:
+          SSH_KEY: ${{ secrets.NICHOST_SSH_KEY }}
+        run: |
+          test -n "$SSH_KEY" || { echo "Secret NICHOST_SSH_KEY is empty"; exit 1; }
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          printf '%s\n' "ssh.aic7997609.nichost.ru ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDaMFocIlueg2t44+zMdup6KI5k2OshsPa0Wh1KagtrEACk4NSrZv4DnMmKbBZX+PyQ4mM2JOfic5y/g9AaKj30ZnFc9dv/qQK1w1Uus9kt5KXC9VMMEPeMlsB8ascEUloYZGFCDAVfvpHOFuszQp489AHltjGYRClSBMfZxlJvHlbEb68e1k+6wXIU4HOv1YXbRtS9iKMOplrTTwXchHlVLrJxZW6AENLTNK+FuNiI8u3NG5qBxQipDq6ItXHdkvOdIVMPHl3weOGJ5Ba6q7REtDlrGtjF5rj0AiAhSQ/Kcrf58SNxsXni3pvrZVgv6Wdjlb2ZnsS1mjVozYbH58IA2mCLUQoX/xdhln8QIyvyMdrCmF62fH5Kk9dwvoKMncB7Ui4txPb5UIlyXzDJ8Svhsy2XtPxjblLzb58bj4LFH1jOI8KlqbRgPieTa4yn3T7XYAdQMA6eW+ERWsmE/YVFEEeN7gPZJP9OWMIs4bizrHV9ES2XdwJaLN7C0lBgng0=" > ~/.ssh/known_hosts
+
+      - name: Upload README
+        run: |
+          SSH_OPTS="-i $HOME/.ssh/id_deploy -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o HostKeyAlgorithms=+ssh-rsa -o PubkeyAcceptedAlgorithms=+ssh-rsa -o UpdateHostKeys=no"
+          scp $SSH_OPTS README.md "$SSH_USER@$HOST:$REMOTE_DIR/README.md"
+
+      - name: Verify
+        run: |
+          SSH_OPTS="-i $HOME/.ssh/id_deploy -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o HostKeyAlgorithms=+ssh-rsa -o PubkeyAcceptedAlgorithms=+ssh-rsa -o UpdateHostKeys=no"
+          REMOTE_SUM=$(ssh $SSH_OPTS "$SSH_USER@$HOST" "sha256sum ~/$REMOTE_DIR/README.md" | cut -d' ' -f1)
+          LOCAL_SUM=$(sha256sum README.md | cut -d' ' -f1)
+          test "$REMOTE_SUM" = "$LOCAL_SUM" && echo "OK: README.md matches" || { echo "Checksum mismatch"; exit 1; }
