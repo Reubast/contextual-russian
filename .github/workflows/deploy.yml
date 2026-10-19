@@ -47,7 +47,7 @@ jobs:
           printf 'YANDEX_API_KEY = "%s"\nYANDEX_FOLDER_ID = "%s"\n' "$YANDEX_API_KEY" "$YANDEX_FOLDER_ID" > kp_config.py
           scp $SSH_OPTS kp_config.py "$SSH_USER@$HOST:aictx.ru/cgi/kp_config.py"
           rm kp_config.py
-          ssh $SSH_OPTS "$SSH_USER@$HOST" "chmod +x ~/aictx.ru/cgi/kp.py"
+          ssh $SSH_OPTS "$SSH_USER@$HOST" "chmod +x ~/aictx.ru/cgi/kp.py; sed -i '1s/^\xEF\xBB\xBF//' ~/aictx.ru/cgi/kp.py"
 
       - name: Verify
         run: |
