@@ -34,12 +34,20 @@ jobs:
           printf '%s\n' "ssh.aic7997609.nichost.ru ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDaMFocIlueg2t44+zMdup6KI5k2OshsPa0Wh1KagtrEACk4NSrZv4DnMmKbBZX+PyQ4mM2JOfic5y/g9AaKj30ZnFc9dv/qQK1w1Uus9kt5KXC9VMMEPeMlsB8ascEUloYZGFCDAVfvpHOFuszQp489AHltjGYRClSBMfZxlJvHlbEb68e1k+6wXIU4HOv1YXbRtS9iKMOplrTTwXchHlVLrJxZW6AENLTNK+FuNiI8u3NG5qBxQipDq6ItXHdkvOdIVMPHl3weOGJ5Ba6q7REtDlrGtjF5rj0AiAhSQ/Kcrf58SNxsXni3pvrZVgv6Wdjlb2ZnsS1mjVozYbH58IA2mCLUQoX/xdhln8QIyvyMdrCmF62fH5Kk9dwvoKMncB7Ui4txPb5UIlyXzDJ8Svhsy2XtPxjblLzb58bj4LFH1jOI8KlqbRgPieTa4yn3T7XYAdQMA6eW+ERWsmE/YVFEEeN7gPZJP9OWMIs4bizrHV9ES2XdwJaLN7C0lBgng0=" > ~/.ssh/known_hosts
 
       - name: Upload files
+        env:
+          YANDEX_API_KEY: ${{ secrets.YANDEX_API_KEY }}
+          YANDEX_FOLDER_ID: ${{ secrets.YANDEX_FOLDER_ID }}
         run: |
           SSH_OPTS="-i $HOME/.ssh/id_deploy -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o HostKeyAlgorithms=+ssh-rsa -o PubkeyAcceptedAlgorithms=+ssh-rsa -o UpdateHostKeys=no"
-          ssh $SSH_OPTS "$SSH_USER@$HOST" "mkdir -p ~/$REMOTE_DIR/en ~/$REMOTE_DIR/zh ~/$REMOTE_DIR/hi"
+          ssh $SSH_OPTS "$SSH_USER@$HOST" "mkdir -p ~/$REMOTE_DIR/en ~/$REMOTE_DIR/zh ~/$REMOTE_DIR/hi ~/aictx.ru/cgi-bin"
           for f in README.md index.html robots.txt sitemap.xml yandex_a11cd095edcedbaf.html googleae9ca30a621e7f44.html en/index.html zh/index.html hi/index.html; do
             scp $SSH_OPTS "$f" "$SSH_USER@$HOST:$REMOTE_DIR/$f"
           done
+          scp $SSH_OPTS "cgi-bin/kp.py" "$SSH_USER@$HOST:aictx.ru/cgi-bin/kp.py"
+          printf 'YANDEX_API_KEY = "%s"\nYANDEX_FOLDER_ID = "%s"\n' "$YANDEX_API_KEY" "$YANDEX_FOLDER_ID" > kp_config.py
+          scp $SSH_OPTS kp_config.py "$SSH_USER@$HOST:aictx.ru/cgi-bin/kp_config.py"
+          rm kp_config.py
+          ssh $SSH_OPTS "$SSH_USER@$HOST" "chmod +x ~/aictx.ru/cgi-bin/kp.py"
 
       - name: Verify
         run: |

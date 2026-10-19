@@ -370,7 +370,7 @@
         $('out').value = '';
         $('copy-out').disabled = true;
         setStatus('Обработка…');
-        fetch('/api/kp', {
+        fetch('/cgi-bin/kp.py', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text: $('src').value.trim() })
