@@ -183,7 +183,6 @@
 <body>
 <div class="wrap">
     <h1 class="title">Контекстный русский [KP]</h1>
-    <p class="langs">Русский · <a href="https://aictx.ru/en/">English</a> · <a href="https://aictx.ru/zh/">中文</a> · <a href="https://aictx.ru/hi/">हिन्दी</a></p>
 
     <nav class="tabs" role="tablist">
         <button type="button" role="tab" data-tab="tool" aria-selected="true" class="active">Инструмент [KP]</button>
@@ -197,52 +196,18 @@
         <p class="muted">Вставьте текст. Нейросеть разберёт его по методологии [KP]: роль, цель, инварианты, ограничения, зона делегирования.</p>
 
         <label for="src">Исходный текст</label>
-        <textarea id="src" maxlength="2000" placeholder="Опишите задачу своими словами. Минимум 300 символов."></textarea>
+        <textarea id="src" maxlength="2000" placeholder="Минимум 300 символов."></textarea>
         <div id="count" class="count"></div>
-
-        <label>Дополнительно (необязательно)</label>
-        <div class="fields">
-            <div>
-                <label for="f-role" style="margin-top:8px">Роль</label>
-                <input type="text" id="f-role" maxlength="300" placeholder="Например: руководитель продукта">
-            </div>
-            <div>
-                <label for="f-goal" style="margin-top:8px">Цель</label>
-                <input type="text" id="f-goal" maxlength="300" placeholder="Какой результат нужен">
-            </div>
-            <div>
-                <label for="f-constraints" style="margin-top:8px">Ограничения</label>
-                <input type="text" id="f-constraints" maxlength="300" placeholder="Сроки, бюджет, что нельзя менять">
-            </div>
-            <div>
-                <label for="f-context" style="margin-top:8px">Контекст среды</label>
-                <input type="text" id="f-context" maxlength="300" placeholder="Продукт, команда, стек, пользователи">
-            </div>
-            <div>
-                <label for="f-format" style="margin-top:8px">Формат результата</label>
-                <input type="text" id="f-format" maxlength="300" placeholder="Например: список из 5 пунктов">
-            </div>
-        </div>
 
         <div class="actions">
             <button type="button" id="apply" class="primary" disabled>Применить [KP]</button>
         </div>
 
-        <div class="panel">
-            <h3>Запрос к модели</h3>
-            <textarea id="prompt" readonly style="min-height:140px;background:#fff"></textarea>
-            <div class="actions">
-                <button type="button" id="copy-prompt" class="secondary">Скопировать запрос</button>
-            </div>
-        </div>
-
-        <div class="panel">
-            <h3>Документ [KP]</h3>
-            <p class="muted">Вывод модели появится здесь после подключения YandexGPT.</p>
-            <div class="actions">
-                <button type="button" id="copy-out" class="secondary" disabled>Скопировать</button>
-            </div>
-            <div class="status" id="quota">Запрос — из 100</div>
+        <label for="out">Документ [KP]</label>
+        <textarea id="out" readonly placeholder="Результат появится здесь."></textarea>
+        <div id="status" class="status"></div>
+        <div class="actions">
+            <button type="button" id="copy-out" class="secondary" disabled>Скопировать</button>
         </div>
     </section>
 
@@ -261,6 +226,8 @@
 
     <!-- Вкладка 3. Манифест (статья без изменений) -->
     <section id="tab-manifest" hidden>
+        <p class="langs">Русский · <a href="https://aictx.ru/en/">English</a> · <a href="https://aictx.ru/zh/">中文</a> · <a href="https://aictx.ru/hi/">हिन्दी</a></p>
+
         <aside class="infobox">
             <div class="caption">Контекстный русский [KP]</div>
             <table>
@@ -369,37 +336,28 @@
     });
     window.addEventListener('hashchange', route);
 
+    var busy = false;
+
     function updateCount() {
         var n = $('src').value.length;
         var c = $('count');
         c.textContent = 'Символов: ' + n + ' из ' + MAX + ' (минимум ' + MIN + ')';
         c.classList.toggle('bad', n > 0 && n < MIN);
-        $('apply').disabled = n < MIN || n > MAX;
+        $('apply').disabled = busy || n < MIN || n > MAX;
     }
 
-    function buildPrompt() {
-        var labels = [
-            ['f-role', 'Роль'], ['f-goal', 'Цель'], ['f-constraints', 'Ограничения'],
-            ['f-context', 'Контекст среды'], ['f-format', 'Формат результата']
-        ];
-        var lines = [];
-        labels.forEach(function (pair) {
-            var v = $(pair[0]).value.trim();
-            if (v) lines.push('[' + pair[1] + ']: ' + v);
-        });
-        var head = lines.length ? lines.join('\n') + '\n\n' : '';
-        return head + '[Исходный текст]:\n' + $('src').value.trim();
-    }
+    function setStatus(t) { $('status').textContent = t; }
 
-    function copyText(el, btn) {
-        var text = el.value;
+    function copyOut() {
+        var el = $('out');
+        var btn = $('copy-out');
         var done = function () {
             var old = btn.textContent;
             btn.textContent = 'Скопировано';
             setTimeout(function () { btn.textContent = old; }, 1500);
         };
         if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text).then(done, function () { el.select(); document.execCommand('copy'); done(); });
+            navigator.clipboard.writeText(el.value).then(done, function () { el.select(); document.execCommand('copy'); done(); });
         } else {
             el.select(); document.execCommand('copy'); done();
         }
@@ -407,11 +365,28 @@
 
     $('src').addEventListener('input', updateCount);
     $('apply').addEventListener('click', function () {
-        $('prompt').value = buildPrompt();
-        $('prompt').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        busy = true;
+        updateCount();
+        $('out').value = '';
+        $('copy-out').disabled = true;
+        setStatus('Обработка…');
+        fetch('/api/kp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: $('src').value.trim() })
+        })
+        .then(function (r) { if (!r.ok) { throw new Error('HTTP ' + r.status); } return r.json(); })
+        .then(function (d) {
+            $('out').value = d.result || '';
+            $('copy-out').disabled = !$('out').value;
+            setStatus('');
+        })
+        .catch(function () {
+            setStatus('Сервис обработки пока не подключён. Попробуйте позже.');
+        })
+        .then(function () { busy = false; updateCount(); });
     });
-    $('copy-prompt').addEventListener('click', function () { copyText($('prompt'), this); });
-
+    $('copy-out').addEventListener('click', copyOut);
     updateCount();
     route();
 })();
