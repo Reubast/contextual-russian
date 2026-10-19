@@ -6,7 +6,7 @@
     <meta name="description" content="Контекстный русский [KP] — прикладная дисциплина для управленцев и менеджеров продукта. Язык описания намерений для LLM, где модель выступает компилятором.">
     <meta name="keywords" content="контекстный русский, KP, язык программирования, LLM, промпт-инжиниринг, AI разработка, большие языковые модели, управление продуктом">
     <meta name="robots" content="index, follow">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'self'; base-uri 'none'; form-action 'none'">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <link rel="canonical" href="https://aictx.ru/">
     <link rel="alternate" hreflang="ru" href="https://aictx.ru/">
@@ -44,6 +44,7 @@
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        [hidden] { display: none !important; }
         body {
             font-family: "Helvetica Neue", Arial, "Segoe UI", Roboto, sans-serif;
             font-size: 16px;
@@ -51,11 +52,7 @@
             color: #202122;
             background: #fff;
         }
-        .wrap {
-            max-width: 960px;
-            margin: 0 auto;
-            padding: 24px 20px 40px;
-        }
+        .wrap { max-width: 960px; margin: 0 auto; padding: 24px 20px 40px; }
         .title {
             font-family: Georgia, "Times New Roman", serif;
             font-size: 1.9em;
@@ -65,6 +62,62 @@
             padding-bottom: 6px;
             margin-bottom: 14px;
         }
+        .langs { font-size: 0.9em; margin: 0 0 16px; color: #54595d; }
+        .tabs {
+            display: flex;
+            gap: 4px;
+            border-bottom: 1px solid #a2a9b1;
+            margin-bottom: 24px;
+        }
+        .tabs button {
+            font: inherit;
+            background: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            border-bottom: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            color: #0645ad;
+            border-radius: 4px 4px 0 0;
+        }
+        .tabs button.active { background: #fff; color: #202122; font-weight: bold; }
+        .slogan { font-family: Georgia, "Times New Roman", serif; font-size: 1.4em; margin-bottom: 8px; }
+        .muted { color: #54595d; font-size: 0.9em; }
+        label { display: block; font-weight: bold; margin: 16px 0 6px; font-size: 0.95em; }
+        textarea, input[type="text"] {
+            width: 100%;
+            font: inherit;
+            font-size: 15px;
+            padding: 10px;
+            border: 1px solid #a2a9b1;
+            border-radius: 4px;
+            background: #fff;
+        }
+        textarea { min-height: 180px; resize: vertical; }
+        .count { font-size: 0.85em; color: #54595d; margin-top: 4px; }
+        .count.bad { color: #b32d2e; }
+        .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
+        .actions { margin-top: 16px; display: flex; gap: 8px; flex-wrap: wrap; }
+        button.primary, button.secondary {
+            font: inherit;
+            padding: 10px 18px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button.primary { background: #0645ad; color: #fff; border: 1px solid #0645ad; }
+        button.secondary { background: #fff; color: #0645ad; border: 1px solid #a2a9b1; }
+        button:disabled { opacity: 0.45; cursor: not-allowed; }
+        .panel {
+            border: 1px solid #a2a9b1;
+            background: #f8f9fa;
+            padding: 16px;
+            margin-top: 24px;
+            border-radius: 4px;
+        }
+        .panel h3 { font-size: 1em; margin-bottom: 8px; }
+        .status { font-size: 0.85em; color: #54595d; margin-top: 8px; }
+        .rules ol { margin: 0 0 12px 24px; }
+        .rules li { margin-bottom: 10px; }
+        .rules strong { color: #202122; }
         .infobox {
             float: right;
             clear: right;
@@ -121,6 +174,7 @@
         }
         footer a, a { color: #0645ad; text-decoration: none; }
         @media (max-width: 720px) {
+            .fields { grid-template-columns: 1fr; }
             .infobox { float: none; width: 100%; margin: 0 0 20px; }
             .title { font-size: 1.5em; }
         }
@@ -129,77 +183,238 @@
 <body>
 <div class="wrap">
     <h1 class="title">Контекстный русский [KP]</h1>
-    <p style="font-size:0.9em;margin:0 0 16px;color:#54595d;">Русский · <a href="https://aictx.ru/en/">English</a> · <a href="https://aictx.ru/zh/">中文</a> · <a href="https://aictx.ru/hi/">हिन्दी</a></p>
+    <p class="langs">Русский · <a href="https://aictx.ru/en/">English</a> · <a href="https://aictx.ru/zh/">中文</a> · <a href="https://aictx.ru/hi/">हिन्दी</a></p>
 
-    <aside class="infobox">
-        <div class="caption">Контекстный русский [KP]</div>
-        <table>
-            <tr><th>Тип</th><td>прикладная дисциплина</td></tr>
-            <tr><th>Область</th><td>инженерия ПО, вычислительная лингвистика, управление AI-продуктами</td></tr>
-            <tr><th>Дата основания</th><td>16 октября 2026</td></tr>
-            <tr><th>Предмет</th><td>описание намерений для LLM</td></tr>
-            <tr><th>Сайт</th><td><a href="https://aictx.ru">aictx.ru</a></td></tr>
-        </table>
-    </aside>
+    <nav class="tabs" role="tablist">
+        <button type="button" role="tab" data-tab="tool" aria-selected="true" class="active">Инструмент [KP]</button>
+        <button type="button" role="tab" data-tab="rules" aria-selected="false">Правила [KP]</button>
+        <button type="button" role="tab" data-tab="manifest" aria-selected="false">Манифест</button>
+    </nav>
 
-    <p class="lead"><strong>[KP]</strong> — язык описания намерений для больших языковых моделей (LLM). Модель выполняет роль компилятора. Дисциплина изучает формулировку требований на русском языке для предсказуемого результата.</p>
+    <!-- Вкладка 1. Инструмент -->
+    <section id="tab-tool">
+        <p class="slogan">Сырой текст → Структура [KP] за 3 секунды.</p>
+        <p class="muted">Вставьте текст. Нейросеть разберёт его по методологии [KP]: роль, цель, инварианты, ограничения, зона делегирования.</p>
 
-    <div class="toc">
-        <strong>Содержание</strong>
-        <ol>
-            <li><a href="#history">История развития языков</a></li>
-            <li><a href="#model">Модель как компилятор</a></li>
-            <li><a href="#context">Почему «контекстный»</a></li>
-            <li><a href="#discipline">Предмет дисциплины</a></li>
-            <li><a href="#benefits">Применение</a></li>
-            <li><a href="#audience">Аудитория</a></li>
-            <li><a href="#links">Ссылки</a></li>
+        <label for="src">Исходный текст</label>
+        <textarea id="src" maxlength="2000" placeholder="Опишите задачу своими словами. Минимум 300 символов."></textarea>
+        <div id="count" class="count"></div>
+
+        <label>Дополнительно (необязательно)</label>
+        <div class="fields">
+            <div>
+                <label for="f-role" style="margin-top:8px">Роль</label>
+                <input type="text" id="f-role" maxlength="300" placeholder="Например: руководитель продукта">
+            </div>
+            <div>
+                <label for="f-goal" style="margin-top:8px">Цель</label>
+                <input type="text" id="f-goal" maxlength="300" placeholder="Какой результат нужен">
+            </div>
+            <div>
+                <label for="f-constraints" style="margin-top:8px">Ограничения</label>
+                <input type="text" id="f-constraints" maxlength="300" placeholder="Сроки, бюджет, что нельзя менять">
+            </div>
+            <div>
+                <label for="f-context" style="margin-top:8px">Контекст среды</label>
+                <input type="text" id="f-context" maxlength="300" placeholder="Продукт, команда, стек, пользователи">
+            </div>
+            <div>
+                <label for="f-format" style="margin-top:8px">Формат результата</label>
+                <input type="text" id="f-format" maxlength="300" placeholder="Например: список из 5 пунктов">
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="button" id="apply" class="primary" disabled>Применить [KP]</button>
+        </div>
+
+        <div class="panel">
+            <h3>Запрос к модели</h3>
+            <textarea id="prompt" readonly style="min-height:140px;background:#fff"></textarea>
+            <div class="actions">
+                <button type="button" id="copy-prompt" class="secondary">Скопировать запрос</button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>Документ [KP]</h3>
+            <p class="muted">Вывод модели появится здесь после подключения YandexGPT.</p>
+            <div class="actions">
+                <button type="button" id="copy-out" class="secondary" disabled>Скопировать</button>
+            </div>
+            <div class="status" id="quota">Запрос — из 100</div>
+        </div>
+    </section>
+
+    <!-- Вкладка 2. Правила -->
+    <section id="tab-rules" class="rules" hidden>
+        <p class="slogan">Правила [KP]</p>
+        <p class="muted">Методология, по которой строится документ [KP].</p>
+        <ol style="margin-top:16px">
+            <li><strong>Двусторонняя однозначность.</strong> Текст переводится на английский без потери смысла. Запрещены идиомы, сложные обороты, метафоры.</li>
+            <li><strong>Информационная плотность.</strong> Текст не содержит лишних слов. Используются сильные глаголы. Лишние слова удаляются.</li>
+            <li><strong>Пять блоков.</strong> Документ [KP] содержит: [РОЛЬ], [ЦЕЛЬ], [ИНВАРИАНТЫ], [ОГРАНИЧЕНИЯ], [ЗОНА ДЕЛЕГИРОВАНИЯ].</li>
+            <li><strong>Цикл утверждения.</strong> Человек задаёт рамку. Нейросеть заполняет. Человек утверждает.</li>
+            <li><strong>Явная ответственность.</strong> Итоговый документ подписывает человек. Нейросеть исполняет.</li>
         </ol>
-    </div>
+    </section>
 
-    <h2 id="history">История развития языков</h2>
-    <p>Языки программирования развивались в сторону повышения абстракции. Машинный код описывал машину. Ассемблер описывал команды. Языки высокого уровня описывали логику. На каждом этапе разработчик переставал описывать, как выполнить действие, и начинал описывать, что должно получиться. Перевод в инструкции брал на себя новый слой: ассемблер, компилятор, интерпретатор.</p>
-    <p>Дальнейший рост был невозможен: не существовало исполнителя, понимавшего описание задачи в исходном виде. Компилятор выполняет формальные правила, но не понимает смысл.</p>
+    <!-- Вкладка 3. Манифест (статья без изменений) -->
+    <section id="tab-manifest" hidden>
+        <aside class="infobox">
+            <div class="caption">Контекстный русский [KP]</div>
+            <table>
+                <tr><th>Тип</th><td>прикладная дисциплина</td></tr>
+                <tr><th>Область</th><td>инженерия ПО, вычислительная лингвистика, управление AI-продуктами</td></tr>
+                <tr><th>Дата основания</th><td>16 октября 2026</td></tr>
+                <tr><th>Предмет</th><td>описание намерений для LLM</td></tr>
+                <tr><th>Сайт</th><td><a href="https://aictx.ru">aictx.ru</a></td></tr>
+            </table>
+        </aside>
 
-    <h2 id="model">Модель как компилятор</h2>
-    <p>Большие языковые модели (LLM) создали исполнителя, понимающего задачу на естественном языке. Если описание задачи считать программой, естественный язык становится языком программирования.</p>
-    <p>Компилятор — модель, парсер — контекст, система типов — ограничения автора, отладчик — проверка результата.</p>
+        <p class="lead"><strong>[KP]</strong> — язык описания намерений для больших языковых моделей (LLM). Модель выполняет роль компилятора. Дисциплина изучает формулировку требований на русском языке для предсказуемого результата.</p>
 
-    <h2 id="context">Почему «контекстный»</h2>
-    <p>Синтаксис машинного кода проверяется автоматически: ошибка останавливает сборку. Естественный язык такой проверки не имеет. Он принимает любую форму и всегда даёт правдоподобный ответ, поэтому искажает смысл. В русском языке это проявляется сильнее из-за свободного порядка слов, многозначности, слов, которые пишутся и звучат одинаково, но означают разное, и видовых различий глаголов.</p>
-    <p>Язык нового уровня проектируют так же, как синтаксис прежних уровней. Функции парсера выполняет автор: задаёт роль, контекст, инварианты, ограничения и формат результата. Всё, что не задано явно, модель дополняет сама.</p>
-    <p>Название «контекстный» отражает принцип: смысл определяет не отдельная фраза, а вся среда. Контекст выполняет роль системы типов.</p>
+        <div class="toc">
+            <strong>Содержание</strong>
+            <ol>
+                <li><a href="#history">История развития языков</a></li>
+                <li><a href="#model">Модель как компилятор</a></li>
+                <li><a href="#context">Почему «контекстный»</a></li>
+                <li><a href="#discipline">Предмет дисциплины</a></li>
+                <li><a href="#benefits">Применение</a></li>
+                <li><a href="#audience">Аудитория</a></li>
+                <li><a href="#links">Ссылки</a></li>
+            </ol>
+        </div>
 
-    <h2 id="discipline">Предмет дисциплины</h2>
-    <p>[KP] — прикладная дисциплина на стыке инженерии ПО и вычислительной лингвистики. Предмет изучения:</p>
-    <ul>
-        <li>формализация требований;</li>
-        <li>архитектура контекстного окна;</li>
-        <li>семантика русского языка при работе с моделью;</li>
-        <li>верификация результата.</li>
-    </ul>
-    <p>[KP] — не промпт-инжиниринг. Промпт-инжиниринг подбирает фразу для разового ответа. [KP] проектирует среду для предсказуемого и воспроизводимого результата.</p>
+        <h2 id="history">История развития языков</h2>
+        <p>Языки программирования развивались в сторону повышения абстракции. Машинный код описывал машину. Ассемблер описывал команды. Языки высокого уровня описывали логику. На каждом этапе разработчик переставал описывать, как выполнить действие, и начинал описывать, что должно получиться. Перевод в инструкции брал на себя новый слой: ассемблер, компилятор, интерпретатор.</p>
+        <p>Дальнейший рост был невозможен: не существовало исполнителя, понимавшего описание задачи в исходном виде. Компилятор выполняет формальные правила, но не понимает смысл.</p>
 
-    <h2 id="benefits">Применение</h2>
-    <ul>
-        <li><strong>Сокращение итераций.</strong> Цикл «запрос — правка — запрос» сжимается до «запрос — проверка».</li>
-        <li><strong>Воспроизводимость.</strong> Требование сохраняет актуальность при смене модели и разработчика.</li>
-        <li><strong>Управляемость.</strong> Требования становятся активом команды, а не историей чата.</li>
-    </ul>
+        <h2 id="model">Модель как компилятор</h2>
+        <p>Большие языковые модели (LLM) создали исполнителя, понимающего задачу на естественном языке. Если описание задачи считать программой, естественный язык становится языком программирования.</p>
+        <p>Компилятор — модель, парсер — контекст, система типов — ограничения автора, отладчик — проверка результата.</p>
 
-    <h2 id="audience">Аудитория</h2>
-    <p>Дисциплина предназначена для управленцев и менеджеров продукта. [KP] позволяет формулировать требования для упряжки AI-агентов без знания программирования. Структура дисциплины обеспечивает предсказуемый результат на уровне продукта.</p>
+        <h2 id="context">Почему «контекстный»</h2>
+        <p>Синтаксис машинного кода проверяется автоматически: ошибка останавливает сборку. Естественный язык такой проверки не имеет. Он принимает любую форму и всегда даёт правдоподобный ответ, поэтому искажает смысл. В русском языке это проявляется сильнее из-за свободного порядка слов, многозначности, слов, которые пишутся и звучат одинаково, но означают разное, и видовых различий глаголов.</p>
+        <p>Язык нового уровня проектируют так же, как синтаксис прежних уровней. Функции парсера выполняет автор: задаёт роль, контекст, инварианты, ограничения и формат результата. Всё, что не задано явно, модель дополняет сама.</p>
+        <p>Название «контекстный» отражает принцип: смысл определяет не отдельная фраза, а вся среда. Контекст выполняет роль системы типов.</p>
 
-    <h2 id="links">Ссылки</h2>
-    <ul>
-        <li>Сайт: <a href="https://aictx.ru">aictx.ru</a></li>
-        <li>Telegram-канал: <a href="https://t.me/context_russian">t.me/context_russian</a></li>
-        <li>English version: <a href="https://aictx.ru/en/">aictx.ru/en/</a></li>
-    </ul>
+        <h2 id="discipline">Предмет дисциплины</h2>
+        <p>[KP] — прикладная дисциплина на стыке инженерии ПО и вычислительной лингвистики. Предмет изучения:</p>
+        <ul>
+            <li>формализация требований;</li>
+            <li>архитектура контекстного окна;</li>
+            <li>семантика русского языка при работе с моделью;</li>
+            <li>верификация результата.</li>
+        </ul>
+        <p>[KP] — не промпт-инжиниринг. Промпт-инжиниринг подбирает фразу для разового ответа. [KP] проектирует среду для предсказуемого и воспроизводимого результата.</p>
+
+        <h2 id="benefits">Применение</h2>
+        <ul>
+            <li><strong>Сокращение итераций.</strong> Цикл «запрос — правка — запрос» сжимается до «запрос — проверка».</li>
+            <li><strong>Воспроизводимость.</strong> Требование сохраняет актуальность при смене модели и разработчика.</li>
+            <li><strong>Управляемость.</strong> Требования становятся активом команды, а не историей чата.</li>
+        </ul>
+
+        <h2 id="audience">Аудитория</h2>
+        <p>Дисциплина предназначена для управленцев и менеджеров продукта. [KP] позволяет формулировать требования для упряжки AI-агентов без знания программирования. Структура дисциплины обеспечивает предсказуемый результат на уровне продукта.</p>
+
+        <h2 id="links">Ссылки</h2>
+        <ul>
+            <li>Сайт: <a href="https://aictx.ru">aictx.ru</a></li>
+            <li>Telegram-канал: <a href="https://t.me/context_russian">t.me/context_russian</a></li>
+            <li>English version: <a href="https://aictx.ru/en/">aictx.ru/en/</a></li>
+        </ul>
+    </section>
 
     <footer>
         <p>© 2026 [KP] · <a href="https://aictx.ru">aictx.ru</a> · Автор: Евгений Сидякин</p>
     </footer>
 </div>
+
+<script>
+(function () {
+    var TABS = ['tool', 'rules', 'manifest'];
+    var MIN = 300, MAX = 2000;
+    var $ = function (id) { return document.getElementById(id); };
+
+    function showTab(name) {
+        TABS.forEach(function (t) {
+            $('tab-' + t).hidden = (t !== name);
+            var b = document.querySelector('[data-tab="' + t + '"]');
+            b.setAttribute('aria-selected', t === name ? 'true' : 'false');
+            b.classList.toggle('active', t === name);
+        });
+    }
+
+    function route() {
+        var h = location.hash.replace('#', '');
+        if (h.indexOf('tab-') === 0 && TABS.indexOf(h.slice(4)) !== -1) {
+            showTab(h.slice(4));
+            window.scrollTo(0, 0);
+        } else if (h && $(h)) {
+            // внутренние ссылки статьи (#history и т.п.) открывают вкладку «Манифест»
+            showTab('manifest');
+            $(h).scrollIntoView();
+        } else {
+            showTab('tool');
+        }
+    }
+
+    document.querySelectorAll('[data-tab]').forEach(function (b) {
+        b.addEventListener('click', function () {
+            location.hash = 'tab-' + b.getAttribute('data-tab');
+        });
+    });
+    window.addEventListener('hashchange', route);
+
+    function updateCount() {
+        var n = $('src').value.length;
+        var c = $('count');
+        c.textContent = 'Символов: ' + n + ' из ' + MAX + ' (минимум ' + MIN + ')';
+        c.classList.toggle('bad', n > 0 && n < MIN);
+        $('apply').disabled = n < MIN || n > MAX;
+    }
+
+    function buildPrompt() {
+        var labels = [
+            ['f-role', 'Роль'], ['f-goal', 'Цель'], ['f-constraints', 'Ограничения'],
+            ['f-context', 'Контекст среды'], ['f-format', 'Формат результата']
+        ];
+        var lines = [];
+        labels.forEach(function (pair) {
+            var v = $(pair[0]).value.trim();
+            if (v) lines.push('[' + pair[1] + ']: ' + v);
+        });
+        var head = lines.length ? lines.join('\n') + '\n\n' : '';
+        return head + '[Исходный текст]:\n' + $('src').value.trim();
+    }
+
+    function copyText(el, btn) {
+        var text = el.value;
+        var done = function () {
+            var old = btn.textContent;
+            btn.textContent = 'Скопировано';
+            setTimeout(function () { btn.textContent = old; }, 1500);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done, function () { el.select(); document.execCommand('copy'); done(); });
+        } else {
+            el.select(); document.execCommand('copy'); done();
+        }
+    }
+
+    $('src').addEventListener('input', updateCount);
+    $('apply').addEventListener('click', function () {
+        $('prompt').value = buildPrompt();
+        $('prompt').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+    $('copy-prompt').addEventListener('click', function () { copyText($('prompt'), this); });
+
+    updateCount();
+    route();
+})();
+</script>
 </body>
 </html>
