@@ -39,15 +39,15 @@ jobs:
           YANDEX_FOLDER_ID: ${{ secrets.YANDEX_FOLDER_ID }}
         run: |
           SSH_OPTS="-i $HOME/.ssh/id_deploy -o IdentitiesOnly=yes -o BatchMode=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o HostKeyAlgorithms=+ssh-rsa -o PubkeyAcceptedAlgorithms=+ssh-rsa -o UpdateHostKeys=no"
-          ssh $SSH_OPTS "$SSH_USER@$HOST" "mkdir -p ~/$REMOTE_DIR/en ~/$REMOTE_DIR/zh ~/$REMOTE_DIR/hi ~/aictx.ru/cgi-bin"
+          ssh $SSH_OPTS "$SSH_USER@$HOST" "mkdir -p ~/$REMOTE_DIR/en ~/$REMOTE_DIR/zh ~/$REMOTE_DIR/hi ~/aictx.ru/cgi"
           for f in README.md index.html robots.txt sitemap.xml yandex_a11cd095edcedbaf.html googleae9ca30a621e7f44.html en/index.html zh/index.html hi/index.html; do
             scp $SSH_OPTS "$f" "$SSH_USER@$HOST:$REMOTE_DIR/$f"
           done
-          scp $SSH_OPTS "cgi-bin/kp.py" "$SSH_USER@$HOST:aictx.ru/cgi-bin/kp.py"
+          scp $SSH_OPTS "cgi-bin/kp.py" "$SSH_USER@$HOST:aictx.ru/cgi/kp.py"
           printf 'YANDEX_API_KEY = "%s"\nYANDEX_FOLDER_ID = "%s"\n' "$YANDEX_API_KEY" "$YANDEX_FOLDER_ID" > kp_config.py
-          scp $SSH_OPTS kp_config.py "$SSH_USER@$HOST:aictx.ru/cgi-bin/kp_config.py"
+          scp $SSH_OPTS kp_config.py "$SSH_USER@$HOST:aictx.ru/cgi/kp_config.py"
           rm kp_config.py
-          ssh $SSH_OPTS "$SSH_USER@$HOST" "chmod +x ~/aictx.ru/cgi-bin/kp.py"
+          ssh $SSH_OPTS "$SSH_USER@$HOST" "chmod +x ~/aictx.ru/cgi/kp.py"
 
       - name: Verify
         run: |
