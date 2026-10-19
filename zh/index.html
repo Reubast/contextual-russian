@@ -121,11 +121,19 @@
             .infobox { float: none; width: 100%; margin: 0 0 20px; }
             .title { font-size: 1.5em; }
         }
+        .tabs { display: flex; gap: 4px; border-bottom: 1px solid #a2a9b1; margin-bottom: 24px; }
+        .tabs .tab { background: #f8f9fa; border: 1px solid #a2a9b1; border-bottom: none; padding: 8px 16px; border-radius: 4px 4px 0 0; color: #0645ad; }
+        .tabs .tab.active { background: #fff; color: #202122; font-weight: bold; }
     </style>
 </head>
 <body>
 <div class="wrap">
     <h1 class="title">语境俄语 [KP]</h1>
+    <nav class="tabs">
+        <a href="https://aictx.ru/#tab-tool" class="tab">Инструмент [KP]</a>
+        <a href="https://aictx.ru/#tab-rules" class="tab">Правила [KP]</a>
+        <a href="https://aictx.ru/#tab-manifest" class="tab active">Манифест</a>
+    </nav>
     <p style="font-size:0.9em;margin:0 0 16px;color:#54595d;"><a href="https://aictx.ru/">Русский</a> · <a href="https://aictx.ru/en/">English</a> · 中文 · <a href="https://aictx.ru/hi/">हिन्दी</a></p>
 
     <aside class="infobox">
